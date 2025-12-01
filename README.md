@@ -42,6 +42,10 @@ npm install
 
 # Start development server
 npm run dev
+
+#diterminal rain run
+npm run realtime-data
+
 ```
 
 ### Environment Variables
