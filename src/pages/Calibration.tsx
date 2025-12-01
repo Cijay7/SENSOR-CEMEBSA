@@ -3,6 +3,7 @@ import { Save, RotateCcw, AlertCircle, CheckCircle, Thermometer, Droplets, Wind,
 import { Card } from '../components/Card'
 import { supabase, isDemoMode } from '../lib/supabase'
 
+
 interface CalibrationValue {
   offset: number
   scale: number
