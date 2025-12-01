@@ -6,71 +6,68 @@ import { supabase, isDemoMode, generateRealtimeData } from '../lib/supabase'
 import type { SensorData } from '../types/database'
 
 const MAX_DATA_POINTS = 60
+const POLL_INTERVAL = 5000 // Poll setiap 5 detik (gratis & efficient)
 
 export function RealtimePage() {
   const [data, setData] = useState<SensorData[]>([])
   const [isLive, setIsLive] = useState(true)
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const lastFetchTimeRef = useRef<string>('')
 
-  useEffect(() => {
-    // Initialize with some data points
-    const initialData: SensorData[] = []
-    for (let i = 0; i < 10; i++) {
-      initialData.push(generateRealtimeData())
+  // Fetch latest data from database using polling
+  const fetchLatestData = async () => {
+    if (isDemoMode) {
+      // Demo mode: generate fake data
+      const newData = generateRealtimeData()
+      setData(prev => {
+        const updated = [...prev, newData]
+        return updated.slice(-MAX_DATA_POINTS)
+      })
+      return
     }
-    setData(initialData)
-    setConnectionStatus('connected')
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+    try {
+      // Get data setelah waktu fetch terakhir
+      const query = supabase
+        .from('sensor_data')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(MAX_DATA_POINTS)
+
+      const { data: sensorData, error } = await query
+
+      if (error) {
+        console.error('Fetch error:', error)
+        setConnectionStatus('disconnected')
+        return
       }
+
+      if (sensorData && sensorData.length > 0) {
+        setData(sensorData.reverse() as SensorData[])
+        setConnectionStatus('connected')
+        lastFetchTimeRef.current = new Date().toISOString()
+      }
+    } catch (err) {
+      console.error('Polling error:', err)
+      setConnectionStatus('disconnected')
     }
+  }
+
+  // Initial fetch
+  useEffect(() => {
+    fetchLatestData()
   }, [])
 
+  // Polling interval
   useEffect(() => {
     if (isLive) {
-      if (isDemoMode) {
-        // Demo mode: generate fake data every 2 seconds
-        intervalRef.current = setInterval(() => {
-          const newData = generateRealtimeData()
-          setData(prev => {
-            const updated = [...prev, newData]
-            return updated.slice(-MAX_DATA_POINTS)
-          })
-        }, 2000)
-      } else {
-        // Real Supabase subscription
-        const channel = supabase
-          .channel('sensor_data_realtime')
-          .on(
-            'postgres_changes',
-            {
-              event: 'INSERT',
-              schema: 'public',
-              table: 'sensor_data'
-            },
-            (payload) => {
-              const newData = payload.new as SensorData
-              setData(prev => {
-                const updated = [...prev, newData]
-                return updated.slice(-MAX_DATA_POINTS)
-              })
-            }
-          )
-          .subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-              setConnectionStatus('connected')
-            } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
-              setConnectionStatus('disconnected')
-            }
-          })
+      // Fetch immediately
+      fetchLatestData()
 
-        return () => {
-          supabase.removeChannel(channel)
-        }
-      }
+      // Then poll at interval
+      intervalRef.current = setInterval(fetchLatestData, POLL_INTERVAL)
+      setConnectionStatus('connected')
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
@@ -163,7 +160,7 @@ export function RealtimePage() {
           <div>
             <p className="text-green-400 font-medium">Mode Realtime Aktif</p>
             <p className="text-slate-400 text-sm">
-              Data diperbarui setiap 2 detik • {data.length} data points
+              Data diperbarui setiap 5 detik • {data.length} data points
             </p>
           </div>
           <div className="ml-auto">
