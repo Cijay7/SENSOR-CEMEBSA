@@ -90,11 +90,11 @@ export function AboutPage() {
         </p>
         <div className="flex items-center justify-center gap-2 mt-4">
           <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
-            v1.0.0
+            v1.6.9
           </span>
-          <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
-            PWA Ready
-          </span>
+          {/* <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium"> */}
+            {/* PWA Ready */}
+          {/* </span> */}
         </div>
       </div>
 
@@ -166,7 +166,7 @@ export function AboutPage() {
       </Card>
 
       {/* Tech Stack */}
-      <Card className="p-6" gradient>
+      {/* <Card className="p-6" gradient>
         <div className="flex items-center gap-2 mb-6">
           <Zap className="w-5 h-5 text-yellow-400" />
           <h2 className="text-xl font-semibold text-white">Teknologi</h2>
@@ -181,7 +181,7 @@ export function AboutPage() {
             </span>
           ))}
         </div>
-      </Card>
+      </Card> */}
 
       {/* PWA Installation Guide */}
       <Card className="p-6" gradient>
@@ -212,7 +212,7 @@ export function AboutPage() {
       </Card>
 
       {/* Supabase Setup Guide */}
-      <Card className="p-6" gradient>
+      {/* <Card className="p-6" gradient>
         <div className="flex items-center gap-2 mb-6">
           <Database className="w-5 h-5 text-green-400" />
           <h2 className="text-xl font-semibold text-white">Konfigurasi Supabase</h2>
@@ -258,7 +258,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key`}
             </pre>
           </div>
         </div>
-      </Card>
+      </Card> */}
 
       {/* Contact & Links */}
       <Card className="p-6" gradient>
@@ -268,7 +268,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key`}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/Cijay7/SENSOR-CEMEBSA"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 rounded-xl bg-slate-700/30 border border-slate-600/50 hover:border-slate-500/50 transition-all"
@@ -307,10 +307,10 @@ VITE_SUPABASE_ANON_KEY=your-anon-key`}
       {/* Footer */}
       <div className="text-center py-8">
         <p className="text-slate-500 text-sm">
-          Made with ❤️ using React, TypeScript, and Supabase
+          {/* Made with ❤️ using React, TypeScript, and Supabase */}
         </p>
         <p className="text-slate-600 text-xs mt-2">
-          © 2024 Dashboard Sensor. All rights reserved.
+          {/* © 2024 Dashboard Sensor. All rights reserved. */}
         </p>
       </div>
     </div>
