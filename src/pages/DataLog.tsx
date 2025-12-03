@@ -209,7 +209,8 @@ export function DataLogPage() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-slate-700/50 border-b border-slate-600">
@@ -298,20 +299,66 @@ export function DataLogPage() {
               </table>
             </div>
 
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3 p-4">
+              {paginatedData.map((row) => (
+                <div 
+                  key={row.id}
+                  className="p-4 rounded-lg bg-slate-700/30 border border-slate-600/50 space-y-2"
+                >
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs text-slate-500 font-medium">Waktu</span>
+                    <span className="text-xs text-slate-300">
+                      {new Date(row.timestamp).toLocaleString('id-ID', {
+                        dateStyle: 'short',
+                        timeStyle: 'short'
+                      })}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-500">Suhu</span>
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-orange-500/10 text-orange-400 text-xs font-medium">
+                        {row.temperature.toFixed(2)}°C
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-500">Kelembaban</span>
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-blue-500/10 text-blue-400 text-xs font-medium">
+                        {row.humidity.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-500">Tekanan</span>
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-purple-500/10 text-purple-400 text-xs font-medium">
+                        {row.pressure.toFixed(1)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-500">Cahaya</span>
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-cyan-500/10 text-cyan-400 text-xs font-medium">
+                        {row.light.toFixed(0)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* Pagination */}
-            <div className="flex items-center justify-between px-6 py-4 bg-slate-700/30 border-t border-slate-700">
-              <p className="text-sm text-slate-400">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-4 md:px-6 py-3 md:py-4 bg-slate-700/30 border-t border-slate-700">
+              <p className="text-xs md:text-sm text-slate-400">
                 Menampilkan {(currentPage - 1) * ITEMS_PER_PAGE + 1} - {Math.min(currentPage * ITEMS_PER_PAGE, filteredData.length)} dari {filteredData.length} data
               </p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-1">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="p-1.5 md:p-2 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5 md:gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let page
                     if (totalPages <= 5) {
@@ -328,7 +375,7 @@ export function DataLogPage() {
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
+                        className={`w-8 h-8 md:w-10 md:h-10 rounded-lg text-xs md:text-sm font-medium transition-all ${
                           currentPage === page
                             ? 'bg-blue-600 text-white'
                             : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -342,9 +389,9 @@ export function DataLogPage() {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="p-1.5 md:p-2 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
