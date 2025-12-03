@@ -55,17 +55,6 @@ const features = [
   }
 ]
 
-const techStack = [
-  { name: 'React 18', color: 'from-cyan-500 to-blue-500' },
-  { name: 'TypeScript', color: 'from-blue-600 to-blue-400' },
-  { name: 'Vite', color: 'from-purple-500 to-pink-500' },
-  { name: 'Tailwind CSS', color: 'from-cyan-400 to-teal-500' },
-  { name: 'Supabase', color: 'from-green-500 to-emerald-500' },
-  { name: 'Recharts', color: 'from-orange-500 to-amber-500' },
-  { name: 'PWA', color: 'from-indigo-500 to-violet-500' },
-  { name: 'Lucide Icons', color: 'from-rose-500 to-pink-500' }
-]
-
 const sensors = [
   { name: 'Suhu', unit: '°C', range: '-40 ~ 85', icon: '🌡️' },
   { name: 'Kelembaban', unit: '%', range: '0 ~ 100', icon: '💧' },

@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { Home, Activity, Settings, Database, Info, Gauge } from 'lucide-react'
-import { useState, useRef, useEffect } from 'react'
+import { useRef } from 'react'
 
 const navItems = [
   { to: '/', icon: Home, label: 'Home' },
@@ -11,7 +11,6 @@ const navItems = [
 ]
 
 export function Layout() {
-  const [activeIndex, setActiveIndex] = useState(0)
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
 
@@ -21,27 +20,6 @@ export function Layout() {
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     touchEndX.current = e.changedTouches[0].clientX
-    handleSwipe()
-  }
-
-  const handleSwipe = () => {
-    const diff = touchStartX.current - touchEndX.current
-    const threshold = 50 // minimum swipe distance
-
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        // Swipe left - next item
-        setActiveIndex((prev) => (prev + 1) % navItems.length)
-      } else {
-        // Swipe right - previous item
-        setActiveIndex((prev) => (prev - 1 + navItems.length) % navItems.length)
-      }
-    }
-  }
-
-  // Auto navigate when clicking
-  const handleNavClick = (index: number) => {
-    setActiveIndex(index)
   }
 
   return (
@@ -106,11 +84,10 @@ export function Layout() {
       {/* Mobile Bottom Navigation Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-800/95 backdrop-blur-sm border-t border-slate-700">
         <div className="flex justify-around items-center">
-          {navItems.map(({ to, icon: Icon, label }, index) => (
+          {navItems.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
               to={to}
-              onClick={() => handleNavClick(index)}
               className={({ isActive }) =>
                 `flex flex-col items-center justify-center py-3 px-4 flex-1 transition-all duration-200 ${
                   isActive
